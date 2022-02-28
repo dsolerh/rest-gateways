@@ -1,21 +1,15 @@
 const app = require("../../../src/server");
 const GatewayModel = require("../../../src/modules/gateway/models/gateway.model");
-const mongoose = require("mongoose");
+const {
+  createConnection,
+  closeConnection,
+} = require("../../utils/setup-mongoose-conection");
 const supertest = require("supertest");
 
-beforeEach((done) => {
-  mongoose.connect(
-    "mongodb://localhost:27017/GatewayTest",
-    { useNewUrlParser: true, useUnifiedTopology: true },
-    () => done()
-  );
-});
+beforeEach(createConnection);
 
-afterEach((done) => {
-  mongoose.connection.db.dropDatabase(() => {
-    mongoose.connection.close(() => done());
-  });
-});
+afterEach(closeConnection);
+
 describe("POST /api/gateway", () => {
   test("(200 Ok) create a valid gateway", async () => {
     const data = {
@@ -68,13 +62,11 @@ describe("POST /api/gateway", () => {
       serialNumber: "G212",
       name: "Lorem ipsum",
       IPV4Address: "123.12.1.1",
-      periferals: [
-        Array.from({ length: 11 }).fill({
-          UID: 10,
-          vendor: "vendor",
-          status: "online",
-        }),
-      ],
+      periferals: Array.from({ length: 11 }).fill({
+        UID: 10,
+        vendor: "vendor",
+        status: "online",
+      }),
     };
 
     await supertest(app).post("/api/gateway").send(data).expect(400);

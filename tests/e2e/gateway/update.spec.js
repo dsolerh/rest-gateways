@@ -1,30 +1,43 @@
 const app = require("../../../src/server");
 const GatewayModel = require("../../../src/modules/gateway/models/gateway.model");
-const mongoose = require("mongoose");
+const {
+  createConnection,
+  closeConnection,
+} = require("../../utils/setup-mongoose-conection");
 const supertest = require("supertest");
 
-beforeEach((done) => {
-  mongoose.connect(
-    "mongodb://localhost:27017/GatewayTest",
-    { useNewUrlParser: true, useUnifiedTopology: true },
-    () => done()
-  );
-});
+beforeEach(createConnection);
 
-afterEach((done) => {
-  mongoose.connection.db.dropDatabase(() => {
-    mongoose.connection.close(() => done());
-  });
-});
+afterEach(closeConnection);
+
 describe("PATCH /api/gateway/:id", () => {
   test("(200 Ok) update a gateway", async () => {
     const data = {
       serialNumber: "G212",
       name: "initial name",
       IPV4Address: "123.12.3.1",
+      periferals: [
+        {
+          UID: 10,
+          vendor: "vendor",
+          status: "online",
+        },
+      ],
     };
     const g = await GatewayModel.create(data);
     data["name"] = "updated name";
+    data["periferals"] = [
+      {
+        UID: 10,
+        vendor: "vendor",
+        status: "offline",
+      },
+      {
+        UID: 12,
+        vendor: "vendor",
+        status: "online",
+      },
+    ];
 
     await supertest(app)
       .patch("/api/gateway/" + g._id)
@@ -33,11 +46,83 @@ describe("PATCH /api/gateway/:id", () => {
       .then(async (response) => {
         // Check the response
         expect(response.body.name).toBe(data.name);
+        expect(response.body.periferals.length).toBe(data.periferals.length);
 
         // Check data in the database
         const gateway = await GatewayModel.findOne({ _id: response.body._id });
         expect(gateway).toBeTruthy();
         expect(gateway.name).toBe(data.name);
+        expect(gateway.periferals.length).toBe(data.periferals.length);
       });
+  });
+
+  test("(400 Bad Request) incorrect IPV4 address", async () => {
+    const data = {
+      serialNumber: "G212",
+      name: "initial name",
+      IPV4Address: "123.12.3.1",
+      periferals: [
+        {
+          UID: 10,
+          vendor: "vendor",
+          status: "online",
+        },
+      ],
+    };
+    const g = await GatewayModel.create(data);
+    data["IPV4Address"] = "updated IPV4";
+
+    await supertest(app)
+      .patch("/api/gateway/" + g._id)
+      .send(data)
+      .expect(400); // Bad request
+  });
+
+  test("(400 Bad request) invalid periferal data", async () => {
+    const data = {
+      serialNumber: "G212",
+      name: "initial name",
+      IPV4Address: "123.12.3.1",
+      periferals: [
+        {
+          UID: 10,
+          vendor: "vendor",
+          status: "online",
+        },
+      ],
+    };
+    const g = await GatewayModel.create(data);
+    data["periferals"] = [{}];
+
+    await supertest(app)
+      .patch("/api/gateway/" + g._id)
+      .send(data)
+      .expect(400); // Bad request
+  });
+
+  test("(400 Bad Request) incorrect amount of periferals", async () => {
+    const data = {
+      serialNumber: "G212",
+      name: "initial name",
+      IPV4Address: "123.12.3.1",
+      periferals: [
+        {
+          UID: 10,
+          vendor: "vendor",
+          status: "online",
+        },
+      ],
+    };
+    const g = await GatewayModel.create(data);
+    data["periferals"] = Array.from({ length: 11 }).fill({
+      UID: 10,
+      vendor: "vendor",
+      status: "online",
+    });
+
+    await supertest(app)
+      .patch("/api/gateway/" + g._id)
+      .send(data)
+      .expect(400); // Bad request
   });
 });
