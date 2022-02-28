@@ -28,3 +28,10 @@ exports.create = (body) => {
   const gateway = new GatewayModel(body);
   return gateway.save();
 };
+
+exports.update = (id, body) => {
+  return GatewayModel.findByIdAndUpdate(id, body, {
+    returnDocument: "after",
+    runValidators: true,
+  });
+};
