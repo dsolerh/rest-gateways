@@ -51,6 +51,11 @@ const doc = {
           $status: "online",
         },
       ]
+    },
+    UpdateGateway: {
+      serialNumber: "number update",
+      name: "name update",
+      IPV4Address: "192.168.1.2",
     }
   },
 };
