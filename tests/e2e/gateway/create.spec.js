@@ -1,5 +1,5 @@
 const app = require("../../../src/server");
-const GatewayModel = require("../../../src/modules/gateway/models/gateway.model");
+const gatewayModel = require("../../../src/modules/gateway/models/gateway.model");
 const {
   createConnection,
   closeConnection,
@@ -29,7 +29,7 @@ describe("POST /api/gateway", () => {
         expect(response.body.name).toBe(data.name);
 
         // Check data in the database
-        const gateway = await GatewayModel.findOne({ _id: response.body._id });
+        const gateway = await gatewayModel.findOne({ _id: response.body._id });
         expect(gateway).toBeTruthy();
         expect(gateway.serialNumber).toBe(data.serialNumber);
         expect(gateway.name).toBe(data.name);

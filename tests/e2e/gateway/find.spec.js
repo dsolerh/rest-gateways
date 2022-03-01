@@ -1,5 +1,5 @@
 const app = require("../../../src/server");
-const GatewayModel = require("../../../src/modules/gateway/models/gateway.model");
+const gatewayModel = require("../../../src/modules/gateway/models/gateway.model");
 const {
   createConnection,
   closeConnection,
@@ -12,7 +12,7 @@ afterEach(closeConnection);
 
 describe("testing find and find-by-id", () => {
   test("GET /api/gateway", async () => {
-    const gateway = await GatewayModel.create({
+    const gateway = await gatewayModel.create({
       serialNumber: "G123",
       name: "Lorem ipsum",
       IPV4Address: "123.12.3.1",
@@ -35,7 +35,7 @@ describe("testing find and find-by-id", () => {
   });
 
   test("GET /api/gateway/:id", async () => {
-    const gateway = await GatewayModel.create({
+    const gateway = await gatewayModel.create({
       serialNumber: "G123",
       name: "Lorem ipsum",
       IPV4Address: "123.12.3.1",

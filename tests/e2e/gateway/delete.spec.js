@@ -1,5 +1,5 @@
 const app = require("../../../src/server");
-const GatewayModel = require("../../../src/modules/gateway/models/gateway.model");
+const gatewayModel = require("../../../src/modules/gateway/models/gateway.model");
 const {
   createConnection,
   closeConnection,
@@ -17,13 +17,13 @@ describe("DELETE /api/gateway", () => {
       name: "Lorem ipsum",
       IPV4Address: "123.12.3.1",
     };
-    const g = await GatewayModel.create(data);
+    const g = await gatewayModel.create(data);
 
     await supertest(app)
       .delete(`/api/gateway/${g._id}`)
       .expect(204)
       .then(async () => {
-        const gateway = await GatewayModel.findById(g._id);
+        const gateway = await gatewayModel.findById(g._id);
         expect(gateway).toBeNull();
       });
   });

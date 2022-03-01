@@ -1,5 +1,5 @@
 const app = require("../../../src/server");
-const GatewayModel = require("../../../src/modules/gateway/models/gateway.model");
+const gatewayModel = require("../../../src/modules/gateway/models/gateway.model");
 const {
   createConnection,
   closeConnection,
@@ -12,7 +12,7 @@ afterEach(closeConnection);
 
 describe("POST /api/gateway/:id/add-device", () => {
   test("(200 Ok) add device to gateway", async () => {
-    const gateway = await GatewayModel.create({
+    const gateway = await gatewayModel.create({
       serialNumber: "G123",
       name: "Lorem ipsum",
       IPV4Address: "123.12.3.1",
@@ -36,7 +36,7 @@ describe("POST /api/gateway/:id/add-device", () => {
         expect(response.body.devices[0].UID).toBe(data.UID);
 
         // Check data in the database
-        const gateway = await GatewayModel.findOne({ _id: response.body._id });
+        const gateway = await gatewayModel.findOne({ _id: response.body._id });
         expect(gateway).toBeTruthy();
         expect(gateway.devices.length).toBe(1);
         expect(gateway.devices[0].UID).toBe(data.UID);
@@ -44,7 +44,7 @@ describe("POST /api/gateway/:id/add-device", () => {
   });
 
   test("(400 Bad request) invalid ipv4", async () => {
-    const gateway = await GatewayModel.create({
+    const gateway = await gatewayModel.create({
       serialNumber: "G123",
       name: "Lorem ipsum",
       IPV4Address: "123.12.3.1",
@@ -59,5 +59,18 @@ describe("POST /api/gateway/:id/add-device", () => {
       .post(`/api/gateway/${gateway._id}/add-device`)
       .send(data)
       .expect(400);
+  });
+
+  test("(404 not Found) no gateway", async () => {
+    const data = {
+      UID: 10,
+      vendor: "vendor",
+      status: "onlinew", // invalid status
+    };
+
+    await supertest(app)
+      .post("/api/gateway/ffffffffffffffffffffffff/add-device")
+      .send(data)
+      .expect(404);
   });
 });

@@ -1,5 +1,5 @@
 const app = require("../../../src/server");
-const GatewayModel = require("../../../src/modules/gateway/models/gateway.model");
+const gatewayModel = require("../../../src/modules/gateway/models/gateway.model");
 const {
   createConnection,
   closeConnection,
@@ -24,7 +24,7 @@ describe("PATCH /api/gateway/:id", () => {
         },
       ],
     };
-    const g = await GatewayModel.create(data);
+    const g = await gatewayModel.create(data);
     data["name"] = "updated name";
     data["devices"] = [
       {
@@ -49,7 +49,7 @@ describe("PATCH /api/gateway/:id", () => {
         expect(response.body.devices.length).toBe(data.devices.length);
 
         // Check data in the database
-        const gateway = await GatewayModel.findOne({ _id: response.body._id });
+        const gateway = await gatewayModel.findOne({ _id: response.body._id });
         expect(gateway).toBeTruthy();
         expect(gateway.name).toBe(data.name);
         expect(gateway.devices.length).toBe(data.devices.length);
@@ -69,7 +69,7 @@ describe("PATCH /api/gateway/:id", () => {
         },
       ],
     };
-    const g = await GatewayModel.create(data);
+    const g = await gatewayModel.create(data);
     data["IPV4Address"] = "updated IPV4";
 
     await supertest(app)
@@ -91,7 +91,7 @@ describe("PATCH /api/gateway/:id", () => {
         },
       ],
     };
-    const g = await GatewayModel.create(data);
+    const g = await gatewayModel.create(data);
     data["devices"] = [{}];
 
     await supertest(app)
@@ -113,7 +113,7 @@ describe("PATCH /api/gateway/:id", () => {
         },
       ],
     };
-    const g = await GatewayModel.create(data);
+    const g = await gatewayModel.create(data);
     data["devices"] = Array.from({ length: 11 }).fill({
       UID: 10,
       vendor: "vendor",
