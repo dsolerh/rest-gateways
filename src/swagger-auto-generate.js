@@ -50,13 +50,18 @@ const doc = {
           $vendor: "someshop",
           $status: "online",
         },
-      ]
+      ],
     },
     UpdateGateway: {
       serialNumber: "number update",
       name: "name update",
       IPV4Address: "192.168.1.2",
-    }
+    },
+    AddDevice: {
+      $UID: "d121e21ada",
+      $vendor: "someshop",
+      $status: "online",
+    },
   },
 };
 
