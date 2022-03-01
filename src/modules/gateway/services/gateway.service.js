@@ -35,3 +35,7 @@ exports.update = (id, body) => {
     runValidators: true,
   });
 };
+
+exports.delete = (id) => {
+  return GatewayModel.findByIdAndDelete(id);
+};
