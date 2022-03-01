@@ -15,7 +15,7 @@ exports.create = async (req, res) => {
   } */
 
   try {
-    const gateway = await GatewayService.create(req.body);
+    const gateway = await GatewayService.createGateway(req.body);
     return res.status(200).send(gateway);
   } catch (error) {
     errorHandler(error, res);
@@ -66,7 +66,7 @@ exports.update = async (req, res) => {
   } */
 
   try {
-    const gateway = await GatewayService.update(req.params.id, req.body);
+    const gateway = await GatewayService.updateGateway(req.params.id, req.body);
     if (!gateway) {
       return res.status(404).send("Not Found");
     }
@@ -86,7 +86,7 @@ exports.delete = async (req, res) => {
   // #swagger.parameters['id'] = { description: 'ID of the gateway' }
 
   try {
-    const gateway = await GatewayService.delete(req.params.id);
+    const gateway = await GatewayService.deleteGateway(req.params.id);
     if (!gateway) {
       return res.status(404).send("Not Found");
     }
