@@ -44,12 +44,6 @@
         "responses": {
           "200": {
             "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "500": {
-            "description": "Internal Server Error"
           }
         }
       },
@@ -62,9 +56,6 @@
         "responses": {
           "200": {
             "description": "OK"
-          },
-          "500": {
-            "description": "Internal Server Error"
           }
         }
       }
@@ -82,6 +73,50 @@
             "required": true,
             "type": "string",
             "description": "ID of the gateway"
+          },
+          {
+            "name": "updatedGateway",
+            "in": "body",
+            "description": "Gateway field to be updated information.",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateGateway"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Gateway found.",
+            "schema": {
+              "$ref": "#/definitions/Gateway"
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Gateway"
+        ],
+        "description": "Endpoint to update an specific gateway by it",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID of the gateway"
+          },
+          {
+            "name": "updatedGateway",
+            "in": "body",
+            "description": "Gateway field to be updated information.",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateGateway"
+            }
           }
         ],
         "responses": {
@@ -90,6 +125,109 @@
               "$ref": "#/definitions/Gateway"
             },
             "description": "Gateway found."
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Gateway"
+        ],
+        "description": "Endpoint to delete an specific gateway by it",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID of the gateway"
+          },
+          {
+            "name": "newDevice",
+            "in": "body",
+            "description": "Device to be added.",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/AddDevice"
+            }
+          },
+          {
+            "name": "deviceId",
+            "description": "ID of the device",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {}
+      }
+    },
+    "/gateway/{id}/add-device": {
+      "post": {
+        "tags": [
+          "Gateway"
+        ],
+        "description": "Endpoint to add a device to a gateway",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID of the gateway"
+          },
+          {
+            "name": "newDevice",
+            "in": "body",
+            "description": "Device to be added.",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/AddDevice"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/gateway/{id}/remove-device/{deviceId}": {
+      "delete": {
+        "tags": [
+          "Gateway"
+        ],
+        "description": "Endpoint to remove a device from a gateway",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID of the gateway"
+          },
+          {
+            "name": "deviceId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID of the device"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       }
@@ -132,27 +270,6 @@
           }
         }
       }
-    },
-    "AddUser": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string",
-          "example": "Jhon Doe"
-        },
-        "age": {
-          "type": "number",
-          "example": 29
-        },
-        "about": {
-          "type": "string",
-          "example": ""
-        }
-      },
-      "required": [
-        "name",
-        "age"
-      ]
     },
     "AddGateway": {
       "type": "object",
@@ -199,6 +316,45 @@
         "serialNumber",
         "name",
         "IPV4Address"
+      ]
+    },
+    "UpdateGateway": {
+      "type": "object",
+      "properties": {
+        "serialNumber": {
+          "type": "string",
+          "example": "number update"
+        },
+        "name": {
+          "type": "string",
+          "example": "name update"
+        },
+        "IPV4Address": {
+          "type": "string",
+          "example": "192.168.1.2"
+        }
+      }
+    },
+    "AddDevice": {
+      "type": "object",
+      "properties": {
+        "UID": {
+          "type": "string",
+          "example": "d121e21ada"
+        },
+        "vendor": {
+          "type": "string",
+          "example": "someshop"
+        },
+        "status": {
+          "type": "string",
+          "example": "online"
+        }
+      },
+      "required": [
+        "UID",
+        "vendor",
+        "status"
       ]
     }
   }
