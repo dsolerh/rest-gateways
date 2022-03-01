@@ -16,7 +16,7 @@ describe("PATCH /api/gateway/:id", () => {
       serialNumber: "G212",
       name: "initial name",
       IPV4Address: "123.12.3.1",
-      periferals: [
+      devices: [
         {
           UID: 10,
           vendor: "vendor",
@@ -26,7 +26,7 @@ describe("PATCH /api/gateway/:id", () => {
     };
     const g = await GatewayModel.create(data);
     data["name"] = "updated name";
-    data["periferals"] = [
+    data["devices"] = [
       {
         UID: 10,
         vendor: "vendor",
@@ -46,13 +46,13 @@ describe("PATCH /api/gateway/:id", () => {
       .then(async (response) => {
         // Check the response
         expect(response.body.name).toBe(data.name);
-        expect(response.body.periferals.length).toBe(data.periferals.length);
+        expect(response.body.devices.length).toBe(data.devices.length);
 
         // Check data in the database
         const gateway = await GatewayModel.findOne({ _id: response.body._id });
         expect(gateway).toBeTruthy();
         expect(gateway.name).toBe(data.name);
-        expect(gateway.periferals.length).toBe(data.periferals.length);
+        expect(gateway.devices.length).toBe(data.devices.length);
       });
   });
 
@@ -61,7 +61,7 @@ describe("PATCH /api/gateway/:id", () => {
       serialNumber: "G212",
       name: "initial name",
       IPV4Address: "123.12.3.1",
-      periferals: [
+      devices: [
         {
           UID: 10,
           vendor: "vendor",
@@ -83,7 +83,7 @@ describe("PATCH /api/gateway/:id", () => {
       serialNumber: "G212",
       name: "initial name",
       IPV4Address: "123.12.3.1",
-      periferals: [
+      devices: [
         {
           UID: 10,
           vendor: "vendor",
@@ -92,7 +92,7 @@ describe("PATCH /api/gateway/:id", () => {
       ],
     };
     const g = await GatewayModel.create(data);
-    data["periferals"] = [{}];
+    data["devices"] = [{}];
 
     await supertest(app)
       .patch("/api/gateway/" + g._id)
@@ -100,12 +100,12 @@ describe("PATCH /api/gateway/:id", () => {
       .expect(400); // Bad request
   });
 
-  test("(400 Bad Request) incorrect amount of periferals", async () => {
+  test("(400 Bad Request) incorrect amount of devices", async () => {
     const data = {
       serialNumber: "G212",
       name: "initial name",
       IPV4Address: "123.12.3.1",
-      periferals: [
+      devices: [
         {
           UID: 10,
           vendor: "vendor",
@@ -114,7 +114,7 @@ describe("PATCH /api/gateway/:id", () => {
       ],
     };
     const g = await GatewayModel.create(data);
-    data["periferals"] = Array.from({ length: 11 }).fill({
+    data["devices"] = Array.from({ length: 11 }).fill({
       UID: 10,
       vendor: "vendor",
       status: "online",

@@ -27,7 +27,7 @@ const doc = {
       serialNumber: "BD213",
       name: "Example gateway",
       IPV4Address: "192.168.1.1",
-      periferals: [
+      devices: [
         {
           UID: "d121e21ada",
           vendor: "someshop",
@@ -44,7 +44,7 @@ const doc = {
       $serialNumber: "BD213",
       $name: "Example gateway",
       $IPV4Address: "192.168.1.1",
-      periferals: [
+      devices: [
         {
           $UID: "d121e21ada",
           $vendor: "someshop",

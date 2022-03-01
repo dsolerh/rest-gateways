@@ -4,7 +4,7 @@ const { IPV4_RGX } = require("../../common/util-regex");
 console.log("Initializing model: Gateway");
 
 // Some fields are mark as required based on a common sence
-const periferalSchema = new Schema({
+const deviceSchema = new Schema({
   UID: {
     type: Number,
     required: true,
@@ -43,8 +43,8 @@ const gatewaySchema = new Schema({
       message: (props) => `${props.value} is not a valid IPV4 address`,
     },
   },
-  periferals: {
-    type: [periferalSchema],
+  devices: {
+    type: [deviceSchema],
     validate: {
       validator: function (v) {
         return v.length <= 10;

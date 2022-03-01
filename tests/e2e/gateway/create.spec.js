@@ -51,7 +51,7 @@ describe("POST /api/gateway", () => {
       serialNumber: "G212",
       name: "Lorem ipsum",
       IPV4Address: "123.12.1.1",
-      periferals: [{}],
+      devices: [{}],
     };
 
     await supertest(app).post("/api/gateway").send(data).expect(400);
@@ -62,7 +62,7 @@ describe("POST /api/gateway", () => {
       serialNumber: "G212",
       name: "Lorem ipsum",
       IPV4Address: "123.12.1.1",
-      periferals: Array.from({ length: 11 }).fill({
+      devices: Array.from({ length: 11 }).fill({
         UID: 10,
         vendor: "vendor",
         status: "online",
