@@ -95,3 +95,25 @@ exports.delete = async (req, res) => {
     errorHandler(error, res);
   }
 };
+
+exports.addDevice = async (req, res) => {
+  // #swagger.tags = ['Gateway']
+  // #swagger.description = 'Endpoint to add a device to a gateway'
+  // #swagger.parameters['id'] = { description: 'ID of the gateway' }
+
+  /* #swagger.parameters['newDevice'] = {
+      in: 'body',
+      description: 'Device to be added.',
+      required: true,
+      schema: { $ref: "#/definitions/AddDevice" }
+  } */
+  try {
+    const gateway = await GatewayService.addDevice(req.params.id, req.body);
+    if (!gateway) {
+      return res.status(404).send("Not Found");
+    }
+    return res.status(201).json(gateway);
+  } catch (error) {
+    errorHandler(error, res);
+  }
+};
