@@ -11,6 +11,10 @@
     {
       "name": "Gateway",
       "description": "Endpoints"
+    },
+    {
+      "name": "Devices",
+      "description": "Endpoints"
     }
   ],
   "schemes": [
@@ -104,10 +108,9 @@
         "parameters": [
           {
             "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string",
-            "description": "ID of the gateway"
+            "description": "ID of the gateway to be deleted",
+            "in": "query",
+            "type": "string"
           },
           {
             "name": "updatedGateway",
@@ -126,9 +129,6 @@
             },
             "description": "Gateway found."
           },
-          "204": {
-            "description": "No Content"
-          },
           "404": {
             "description": "Not Found"
           }
@@ -142,10 +142,9 @@
         "parameters": [
           {
             "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string",
-            "description": "ID of the gateway"
+            "description": "ID of the gateway",
+            "in": "query",
+            "type": "string"
           },
           {
             "name": "newDevice",
@@ -163,13 +162,17 @@
             "type": "string"
           }
         ],
-        "responses": {}
+        "responses": {
+          "404": {
+            "description": "Not Found"
+          }
+        }
       }
     },
     "/gateway/{id}/add-device": {
       "post": {
         "tags": [
-          "Gateway"
+          "Devices"
         ],
         "description": "Endpoint to add a device to a gateway",
         "parameters": [
@@ -203,7 +206,7 @@
     "/gateway/{id}/remove-device/{deviceId}": {
       "delete": {
         "tags": [
-          "Gateway"
+          "Devices"
         ],
         "description": "Endpoint to remove a device from a gateway",
         "parameters": [

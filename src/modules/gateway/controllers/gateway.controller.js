@@ -91,13 +91,17 @@ async function updateGateway(req, res) {
 }
 
 async function deleteGateway(req, res) {
+  // #swagger.auto = false
   // #swagger.tags = ['Gateway']
   // #swagger.description = 'Endpoint to delete an specific gateway by it's id'
-  // #swagger.parameters['id'] = { description: 'ID of the gateway' }
+  // #swagger.parameters['id'] = { description: 'ID of the gateway to be deleted' }
 
   try {
     const gateway = await GatewayService.deleteGateway(req.params.id);
     if (!gateway) {
+      /* #swagger.responses[404] = {
+          description: 'Not Found',
+      } */
       return res.status(404).send("Not Found");
     }
     return res.status(204).json(gateway);
@@ -107,7 +111,7 @@ async function deleteGateway(req, res) {
 }
 
 async function addDevice(req, res) {
-  // #swagger.tags = ['Gateway']
+  // #swagger.tags = ['Devices']
   // #swagger.description = 'Endpoint to add a device to a gateway'
   // #swagger.parameters['id'] = { description: 'ID of the gateway' }
 
@@ -129,7 +133,7 @@ async function addDevice(req, res) {
 }
 
 async function removeDevice(req, res) {
-  // #swagger.tags = ['Gateway']
+  // #swagger.tags = ['Devices']
   // #swagger.description = 'Endpoint to remove a device from a gateway'
   // #swagger.parameters['id'] = { description: 'ID of the gateway' }
   // #swagger.parameters['deviceId'] = { description: 'ID of the device' }

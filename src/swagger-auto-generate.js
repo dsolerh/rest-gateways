@@ -1,4 +1,8 @@
-const swaggerAutogen = require("swagger-autogen")();
+const swaggerAutogen = require("swagger-autogen")({
+  autoHeaders: false,
+  autoQuery: false,
+  autoBody: false,
+});
 const path = require("path");
 
 const HOST = process.env.APP_HOST || "localhost",
@@ -19,6 +23,10 @@ const doc = {
   tags: [
     {
       name: "Gateway",
+      description: "Endpoints",
+    },
+    {
+      name: "Devices",
       description: "Endpoints",
     },
   ],
