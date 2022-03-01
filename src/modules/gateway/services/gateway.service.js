@@ -68,7 +68,7 @@ class GatewayService {
     }
     device.remove();
     await gateway.save();
-    return findById(id);
+    return this.findById(id);
   }
 }
 
