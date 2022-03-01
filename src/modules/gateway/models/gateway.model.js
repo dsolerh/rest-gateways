@@ -49,9 +49,8 @@ const gatewaySchema = new Schema({
       validator: function (v) {
         return v.length <= 10;
       },
-      message: (props) => `${props.value} is not a valid phone number!`,
+      message: (props) => `${props.value} a gateway can only have 10 devices top!`,
     },
-    default: () => [],
   },
 });
 
