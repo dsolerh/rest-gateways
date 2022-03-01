@@ -1,14 +1,22 @@
-const app = require("../../../src/server");
-const gatewayModel = require("../../../src/modules/gateway/models/gateway.model");
-const {
-  createConnection,
-  closeConnection,
-} = require("../../utils/setup-mongoose-conection");
+const getServer = require("../../../src/server");
+const getGatewayModel = require("../../../src/modules/gateway/models/gateway.model");
 const supertest = require("supertest");
+const mongoose = require("mongoose");
 
-beforeEach(createConnection);
+let app, gatewayModel, mongooseInstance;
+beforeEach(async () => {
+  mongooseInstance = await mongoose.connect(
+    "mongodb://localhost:27017/GatewayTestFind"
+  );
+  app = getServer(mongooseInstance);
+  gatewayModel = getGatewayModel(mongooseInstance);
+});
 
-afterEach(closeConnection);
+afterEach((done) => {
+  mongooseInstance.connection.db.dropDatabase(() => {
+    mongooseInstance.connection.close(() => done());
+  });
+});
 
 describe("testing find and find-by-id", () => {
   test("GET /api/gateway", async () => {

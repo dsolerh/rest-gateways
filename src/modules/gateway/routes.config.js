@@ -1,20 +1,30 @@
 const router = require("express").Router();
-const GatewayController = require("./controllers/gateway.controller");
+const { GatewayController } = require("./controllers/gateway.controller");
 
-console.log("Initializing routes: Gateway");
+module.exports = (mongooseInstance) => {
+  console.log("Initializing routes: Gateway");
 
-// basic gateway CRUD
-router.post("/gateway", GatewayController.createGateway);
-router.get("/gateway", GatewayController.listGateways);
-router.get("/gateway/:id", GatewayController.getById);
-router.patch("/gateway/:id", GatewayController.updateGateway);
-router.delete("/gateway/:id", GatewayController.deleteGateway);
+  const controller = new GatewayController(mongooseInstance);
 
-// devices management
-router.post("/gateway/:id/add-device", GatewayController.addDevice);
-router.delete(
-  "/gateway/:id/remove-device/:deviceId",
-  GatewayController.removeDevice
-);
+  // basic gateway CRUD
+  router.post("/gateway", (req, res) => controller.createGateway(req, res));
+  router.get("/gateway", (req, res) => controller.listGateways(req, res));
+  router.get("/gateway/:id", (req, res) => controller.getById(req, res));
+  router.patch("/gateway/:id", (req, res) =>
+    controller.updateGateway(req, res)
+  );
+  router.delete("/gateway/:id", (req, res) =>
+    controller.deleteGateway(req, res)
+  );
 
-module.exports = router;
+  // devices management
+  router.post("/gateway/:id/add-device", (req, res) =>
+    controller.addDevice(req, res)
+  );
+  router.delete(
+    "/gateway/:id/remove-device/:deviceId",
+    controller.removeDevice
+  );
+
+  return router;
+};

@@ -1,7 +1,5 @@
-const { Schema, model } = require("mongoose");
+const { Schema } = require("mongoose");
 const { IPV4_RGX } = require("../../common/util-regex");
-
-console.log("Initializing model: Gateway");
 
 // Some fields are mark as required based on a common sence
 const deviceSchema = new Schema({
@@ -49,9 +47,13 @@ const gatewaySchema = new Schema({
       validator: function (v) {
         return v.length <= 10;
       },
-      message: (props) => `${props.value} a gateway can only have 10 devices top!`,
+      message: (props) =>
+        `${props.value} a gateway can only have 10 devices top!`,
     },
   },
 });
 
-module.exports = model("Gateway", gatewaySchema);
+module.exports = (mongooseInstance) => {
+  console.log("Initializing model: Gateway");
+  return mongooseInstance.model("Gateway", gatewaySchema);
+};

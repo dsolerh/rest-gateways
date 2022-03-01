@@ -11,9 +11,10 @@ app.use(morgan("dev"));
 app.use(cors());
 
 // Routes
-const GatewayRouter = require("./modules/gateway/routes.config");
+const setGatewayRouter = require("./modules/gateway/routes.config");
 
-// Set the Routes
-app.use("/api", GatewayRouter);
-
-module.exports = app;
+module.exports = (mongooseInstance) => {
+  // Set the Routes
+  app.use("/api", setGatewayRouter(mongooseInstance));
+  return app;
+};
