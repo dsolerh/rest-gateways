@@ -5,7 +5,8 @@
   "main": "server.js",
   "scripts": {
     "test": "jest",
-    "g:docs": "node src/swagger-auto-generate.js"
+    "g:docs": "node src/swagger-auto-generate.js",
+    "start": "node src/index.js"
   },
   "keywords": [
     "nodejs",
