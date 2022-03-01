@@ -21,9 +21,8 @@ module.exports = (mongooseInstance) => {
   router.post("/gateway/:id/add-device", (req, res) =>
     controller.addDevice(req, res)
   );
-  router.delete(
-    "/gateway/:id/remove-device/:deviceId",
-    controller.removeDevice
+  router.delete("/gateway/:id/remove-device/:deviceId", (req, res) =>
+    controller.removeDevice(req, res)
   );
 
   return router;
