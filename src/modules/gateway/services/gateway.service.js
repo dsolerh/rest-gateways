@@ -45,7 +45,24 @@ async function deleteGateway(id) {
 
 async function addDevice(id, device) {
   const gateway = await GatewayModel.findById(id);
+  if (!gateway) {
+    return null;
+  }
   gateway.devices.push(device);
+  await gateway.save();
+  return findById(id);
+}
+
+async function removeDevice(id, deviceId) {
+  const gateway = await GatewayModel.findById(id);
+  if (!gateway) {
+    return null;
+  }
+  const device = gateway.devices.id(deviceId);
+  if (!device) {
+    return null;
+  }
+  device.remove();
   await gateway.save();
   return findById(id);
 }
@@ -57,4 +74,5 @@ module.exports = {
   updateGateway,
   createGateway,
   addDevice,
+  removeDevice,
 };

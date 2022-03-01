@@ -3,7 +3,17 @@ const errorHandler = require("../../common/error-handling");
 
 console.log("Initializing controller: Gateway");
 
-exports.create = async (req, res) => {
+module.exports = {
+  createGateway,
+  listGateways,
+  getById,
+  updateGateway,
+  deleteGateway,
+  removeDevice,
+  addDevice,
+};
+
+async function createGateway(req, res) {
   // #swagger.tags = ['Gateway']
   // #swagger.description = 'Endpoint to create a gateway'
 
@@ -20,9 +30,9 @@ exports.create = async (req, res) => {
   } catch (error) {
     errorHandler(error, res);
   }
-};
+}
 
-exports.list = async (req, res) => {
+async function listGateways(req, res) {
   // #swagger.tags = ['Gateway']
   // #swagger.description = 'Endpoint to list all gateways'
 
@@ -32,9 +42,9 @@ exports.list = async (req, res) => {
   } catch (error) {
     errorHandler(error, res);
   }
-};
+}
 
-exports.getById = async (req, res) => {
+async function getById(req, res) {
   // #swagger.tags = ['Gateway']
   // #swagger.description = 'Endpoint to show an specific gateway by it's id'
   // #swagger.parameters['id'] = { description: 'ID of the gateway' }
@@ -51,9 +61,9 @@ exports.getById = async (req, res) => {
   } catch (error) {
     errorHandler(error, res);
   }
-};
+}
 
-exports.update = async (req, res) => {
+async function updateGateway(req, res) {
   // #swagger.tags = ['Gateway']
   // #swagger.description = 'Endpoint to update an specific gateway by it's id'
   // #swagger.parameters['id'] = { description: 'ID of the gateway' }
@@ -78,9 +88,9 @@ exports.update = async (req, res) => {
   } catch (error) {
     errorHandler(error, res);
   }
-};
+}
 
-exports.delete = async (req, res) => {
+async function deleteGateway(req, res) {
   // #swagger.tags = ['Gateway']
   // #swagger.description = 'Endpoint to delete an specific gateway by it's id'
   // #swagger.parameters['id'] = { description: 'ID of the gateway' }
@@ -94,9 +104,9 @@ exports.delete = async (req, res) => {
   } catch (error) {
     errorHandler(error, res);
   }
-};
+}
 
-exports.addDevice = async (req, res) => {
+async function addDevice(req, res) {
   // #swagger.tags = ['Gateway']
   // #swagger.description = 'Endpoint to add a device to a gateway'
   // #swagger.parameters['id'] = { description: 'ID of the gateway' }
@@ -116,4 +126,24 @@ exports.addDevice = async (req, res) => {
   } catch (error) {
     errorHandler(error, res);
   }
-};
+}
+
+async function removeDevice(req, res) {
+  // #swagger.tags = ['Gateway']
+  // #swagger.description = 'Endpoint to remove a device from a gateway'
+  // #swagger.parameters['id'] = { description: 'ID of the gateway' }
+  // #swagger.parameters['deviceId'] = { description: 'ID of the device' }
+
+  try {
+    const gateway = await GatewayService.removeDevice(
+      req.params.id,
+      req.params.deviceId
+    );
+    if (!gateway) {
+      return res.status(404).send("Not Found");
+    }
+    return res.status(204).json(gateway);
+  } catch (error) {
+    errorHandler(error, res);
+  }
+}
