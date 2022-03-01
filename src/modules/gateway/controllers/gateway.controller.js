@@ -1,7 +1,8 @@
 const GatewayService = require("../services/gateway.service");
-const { ValidationError } = require("mongoose").Error;
+const errorHandler = require("../../common/error-handling");
 
 console.log("Initializing controller: Gateway");
+
 exports.create = async (req, res) => {
   // #swagger.tags = ['Gateway']
   // #swagger.description = 'Endpoint to create a gateway'
@@ -17,11 +18,7 @@ exports.create = async (req, res) => {
     const gateway = await GatewayService.create(req.body);
     return res.status(200).send(gateway);
   } catch (error) {
-    console.error(error);
-    if (error instanceof ValidationError) {
-      return res.status(400).json(error);
-    }
-    return res.status(500).send("Internal Server Error");
+    errorHandler(error, res);
   }
 };
 
@@ -29,25 +26,31 @@ exports.list = async (req, res) => {
   // #swagger.tags = ['Gateway']
   // #swagger.description = 'Endpoint to list all gateways'
 
-  const gateways = await GatewayService.findByPages(req.query);
-
-  return res.status(200).send(gateways);
+  try {
+    const gateways = await GatewayService.findByPages(req.query);
+    return res.status(200).send(gateways);
+  } catch (error) {
+    errorHandler(error, res);
+  }
 };
 
 exports.getById = async (req, res) => {
   // #swagger.tags = ['Gateway']
   // #swagger.description = 'Endpoint to show an specific gateway by it's id'
   // #swagger.parameters['id'] = { description: 'ID of the gateway' }
-
-  const gateway = await GatewayService.findById(req.params.id);
-  if (!gateway) {
-    return res.status(404).send("Not Found");
-  }
-  /* #swagger.responses[200] = { 
+  try {
+    const gateway = await GatewayService.findById(req.params.id);
+    if (!gateway) {
+      return res.status(404).send("Not Found");
+    }
+    /* #swagger.responses[200] = { 
         schema: { $ref: "#/definitions/Gateway" },
         description: 'Gateway found.' 
     } */
-  return res.status(200).json(gateway);
+    return res.status(200).json(gateway);
+  } catch (error) {
+    errorHandler(error, res);
+  }
 };
 
 exports.update = async (req, res) => {
@@ -73,10 +76,22 @@ exports.update = async (req, res) => {
       } */
     return res.status(200).json(gateway);
   } catch (error) {
-    console.error(error);
-    if (error instanceof ValidationError) {
-      return res.status(400).json(error);
+    errorHandler(error, res);
+  }
+};
+
+exports.delete = async (req, res) => {
+  // #swagger.tags = ['Gateway']
+  // #swagger.description = 'Endpoint to delete an specific gateway by it's id'
+  // #swagger.parameters['id'] = { description: 'ID of the gateway' }
+
+  try {
+    const gateway = await GatewayService.delete(req.params.id);
+    if (!gateway) {
+      return res.status(404).send("Not Found");
     }
-    return res.status(500).send("Internal Server Error");
+    return res.status(204).json(gateway);
+  } catch (error) {
+    errorHandler(error, res);
   }
 };
